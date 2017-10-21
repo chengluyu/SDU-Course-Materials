@@ -18,10 +18,6 @@ public:
         rank_.resize(size, 0);
     }
     
-    inline int operator[] (int i) {
-        return pre_[i];
-    }
-    
     int find(int x) {
         return pre_[x] == x ? x : (pre_[x] = find(pre_[x]));
     }
@@ -64,6 +60,9 @@ void fastConnectDomain(const cv::Mat & input, cv::Mat & output) {
             if (input.at<uchar>(y, x) == input.at<uchar>(y - 1, x - 1)) {
                 set.merge(klass, klass - input.cols - 1);
             }
+            if (input.at<uchar>(y - 1, x) == input.at<uchar>(y, x - 1)) {
+                set.merge(klass - 1, klass - input.cols);
+            }
         }
     }
     // klasses holds the mapping between class indices and colors
@@ -75,7 +74,7 @@ void fastConnectDomain(const cv::Mat & input, cv::Mat & output) {
     // for all pixels
     for (int y = 0, i = 0; y < input.rows; y++) {
         for (int x = 0; x < input.cols; x++, i++) {
-            auto result = klasses.find(set[i]);
+            auto result = klasses.find(set.find(i));
             if (result == klasses.end()) {
                 // generate a random color
                 cv::Vec3b color {
