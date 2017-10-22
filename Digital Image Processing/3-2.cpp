@@ -83,7 +83,7 @@ void fastConnectDomain(const cv::Mat & input, cv::Mat & output) {
                     uniform_dist(engine)
                 };
                 // dye this class with the color
-                klasses[set[i]] = color;
+                klasses[set.find(i)] = color;
                 output.at<cv::Vec3b>(y, x) = color;
             } else {
                 output.at<cv::Vec3b>(y, x) = result->second;
